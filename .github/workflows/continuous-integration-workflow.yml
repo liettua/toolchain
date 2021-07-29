@@ -1,1 +1,4 @@
-.
+jobs:
+  my_job:
+    name: build
+    runs-on: ubuntu-latest
