@@ -30,7 +30,7 @@ jobs:
         git clone --depth=1 https://github.com/crosstool-ng/crosstool-ng.git
         cd crosstool-ng
         ./bootstrap
-        ./configure --prefix=../.local/
+        ./configure --prefix=$PWD/.local/
         make
         make install
         cd ..
