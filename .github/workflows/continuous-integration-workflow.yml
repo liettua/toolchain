@@ -48,9 +48,9 @@ jobs:
         sed -i -e '/CT_PREFIX_DIR/s/HOME/CT_TOP_DIR/' .config
         ct-ng build.$(nproc)
         ls
-        tar -czvf aarch64-unknown-linux-gnu.tar.gz toolchains/ 
+        tar -czf aarch64-unknown-linux-gnu.tar.gz toolchains/ 
     - name: upload built toolchain
       uses: actions/upload-artifact@v2.2.4
       with:
         name: aarch64-unknown-linux-gnu.tar.gz
-        path: aarch64-unknown-linux-gnu.tar.gz
+        path: tc/aarch64-unknown-linux-gnu.tar.gz
