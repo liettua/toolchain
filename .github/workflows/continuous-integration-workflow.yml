@@ -33,9 +33,8 @@ jobs:
         ./configure --prefix=$PWD/.local/
         make -j$(nproc)
         make install
-        mv .local/ ..
+        cp .local/ ..
         cd ..
-        rm -rf crosstool-ng
         echo "$GITHUB_WORKSPACE/.local/bin" >> $GITHUB_PATH
     - name: build aarch64-unknown-linux-gnu toolchain
       run: |
