@@ -4,7 +4,7 @@ on:
 
 jobs:
   test:
-    name: Test on ubuntu-latest
+    name: build toolchain
     runs-on: ubuntu-latest
     steps:
     - name: get latest build tools
@@ -30,15 +30,23 @@ jobs:
         git clone --depth=1 https://github.com/crosstool-ng/crosstool-ng.git
         cd crosstool-ng
         ./bootstrap
-        ./configure --prefix=$PWD/.local/
-        make
-        make install
-        cd ..
-        rm -rf crosstool-ng
-        mkdir build
-        cd build
-        ct-ng aarch64-unknown-linux-gnu
+        ./configure --enable-local
+        make -j$(nproc)
+    - name: build aarch64-unknown-linux-gnu toolchain
+      run: |
+        mkdir tc
+        cd tc
+        mkdir -p toolchains
+        export CT_PREFIX="toolchains"
+        ../ct-ng aarch64-unknown-linux-gnu
         sed -i -e '/CT_LOG_PROGRESS_BAR/s/y$/n/' .config
         sed -i -e '/CT_LOCAL_TARBALLS_DIR/s/HOME/CT_TOP_DIR/' .config
         sed -i -e '/CT_PREFIX_DIR/s/HOME/CT_TOP_DIR/' .config
-        ct-ng build
+        ../ct-ng build.$(nproc)
+        ls
+        tar -czvf aarch64-unknown-linux-gnu.tar.gz toolchains/ 
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.4
+      with:
+        name: aarch64-unknown-linux-gnu.tar.gz
+        path: aarch64-unknown-linux-gnu.tar.gz
