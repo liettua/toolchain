@@ -7,6 +7,20 @@ jobs:
     name: Test on ubuntu-latest
     runs-on: ubuntu-latest
     steps:
-    - name: test
+    - name: get latest build tools
       run: |
-        echo hi
+        make --version
+        sudo apt-get update
+        sudo apt-get upgrade -y
+        sudo apt-get install -y gperf help2man libtool-bin
+        wget https://ftp.gnu.org/gnu/make/make-4.3.tar.gz
+        tar xvzf make-4.3.tar.gz
+        cd make-4.3
+        ./configure
+        bash ./build.sh
+        sudo install ./make /usr/local/bin/make
+        cd ..
+        rm -rf make-4.3
+        rm -rf make-4.3.tar.gz
+        make --version
+        gcc --version
