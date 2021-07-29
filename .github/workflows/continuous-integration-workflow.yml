@@ -25,8 +25,20 @@ jobs:
         cd ..
         rm -rf make-4.3
         rm -rf make-4.3.tar.gz
-        ls
-        make --version
-        gcc --version
-        g++ --version
-        cpp --version
+    - name: build ct-ng
+      run: |
+        git clone --depth=1 https://github.com/crosstool-ng/crosstool-ng.git
+        cd crosstool-ng
+        ./bootstrap
+        ./configure --prefix=../.local/
+        make
+        make install
+        cd ..
+        rm -rf crosstool-ng
+        mkdir build
+        cd build
+        ct-ng aarch64-unknown-linux-gnu
+        sed -i -e '/CT_LOG_PROGRESS_BAR/s/y$/n/' .config
+        sed -i -e '/CT_LOCAL_TARBALLS_DIR/s/HOME/CT_TOP_DIR/' .config
+        sed -i -e '/CT_PREFIX_DIR/s/HOME/CT_TOP_DIR/' .config
+        ct-ng build
