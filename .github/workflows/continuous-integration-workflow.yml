@@ -9,10 +9,10 @@ jobs:
     steps:
     - name: get latest build tools
       run: |
-        make --version
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/ppa -y
         sudo apt-get update
         sudo apt-get upgrade -y
-        sudo apt-get install -y gperf help2man libtool-bin
+        sudo apt-get install -y gperf help2man libtool-bin gcc-11 g++-11
         wget https://ftp.gnu.org/gnu/make/make-4.3.tar.gz
         tar xvzf make-4.3.tar.gz
         cd make-4.3
@@ -24,3 +24,4 @@ jobs:
         rm -rf make-4.3.tar.gz
         make --version
         gcc --version
+        g++ --version
